@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <PawnKindDef>
+    <defName>DeityPawn</defName>
+    <label>god</label>
+    <labelPlural>gods</labelPlural>
+    <labelFemale>goddess</labelFemale>
+    <labelFemalePlural>goddesses</labelFemalePlural>
+    <combatPower>30</combatPower>
+    <race>Human</race>
+    <acceptArrestChanceFactor>0.5</acceptArrestChanceFactor>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Offworld</li>
+          <li>Pirate</li>
+          <li>Tribal</li>
+        </categories>
+      </li>
+    </backstoryFilters>
+    <backstoryCryptosleepCommonality>0.1</backstoryCryptosleepCommonality>
+    <baseRecruitDifficulty>0.50</baseRecruitDifficulty>
+    <itemQuality>Poor</itemQuality>
+    <chemicalAddictionChance>0.03</chemicalAddictionChance>
+    <apparelIgnoreSeasons>true</apparelIgnoreSeasons>
+    <techHediffsChance>0.03</techHediffsChance>
+    <techHediffsMoney>50~50</techHediffsMoney>
+    <techHediffsTags>
+      <li>Poor</li>
+    </techHediffsTags>
+    <initialWillRange>2~4</initialWillRange>
+    <initialResistanceRange>28~44</initialResistanceRange>
+  </PawnKindDef>
+</Defs>

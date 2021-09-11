@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Health</defName>
+    <label>Health</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>War</defName>
+    <label>War</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Peace</defName>
+    <label>Peace</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Agriculture</defName>
+    <label>Agriculture</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Crafting</defName>
+    <label>Crafting</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Partying</defName>
+    <label>Partying</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+
+  <GodsWalkAmongUs.DeityDomainDef>
+    <defName>Thunder</defName>
+    <label>Thunder</label>
+    <generationWeight>100</generationWeight>
+  </GodsWalkAmongUs.DeityDomainDef>
+</Defs>

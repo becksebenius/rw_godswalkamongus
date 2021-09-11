@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Gods Walk Among Us</name>
+  <packageId>test</packageId>
+  <author>beck</author>
+  <supportedVersions>
+    <li>1.3</li>
+  </supportedVersions>
+  <description>
+    Oops
+  </description>
+</ModMetaData>

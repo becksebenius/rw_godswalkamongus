@@ -1,0 +1,4 @@
+D:\Games\Steam\steamapps\common\RimWorld\Mods\GodsWalkAmongUs\Source\GodsWalkAmongUs\obj\Debug\GodsWalkAmongUs.csprojAssemblyReference.cache
+D:\Games\Steam\steamapps\common\RimWorld\Mods\GodsWalkAmongUs\Source\GodsWalkAmongUs\obj\Debug\GodsWalkAmongUs.csproj.CoreCompileInputs.cache
+D:\Games\Steam\steamapps\common\RimWorld\Mods\GodsWalkAmongUs\Assemblies\GodsWalkAmongUs.dll
+D:\Games\Steam\steamapps\common\RimWorld\Mods\GodsWalkAmongUs\Source\GodsWalkAmongUs\obj\Debug\GodsWalkAmongUs.dll

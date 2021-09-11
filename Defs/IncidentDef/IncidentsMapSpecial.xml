@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+    <IncidentDef>
+        <defName>GodArrival</defName>
+        <label>Oh God!</label>
+        <letterLabel>Oh God!</letterLabel>
+        <letterText>A god arrives!</letterText>
+        <letterDef>PositiveEvent</letterDef>
+        <targetTags>
+            <li>Map_PlayerHome</li>
+        </targetTags>
+        <workerClass>GodsWalkAmongUs.GodArrival</workerClass>
+        <category>Misc</category>
+        <baseChance>1</baseChance>
+        <pointsScaleable>true</pointsScaleable>
+        <requireColonistsPresent>false</requireColonistsPresent>
+    </IncidentDef>
+</Defs>

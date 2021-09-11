@@ -34,7 +34,6 @@ namespace GodsWalkAmongUs.HarmonyPatches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            Log.Message("Transpiling!");
             var inList = instructions.ToList();
             int? injectionIndex = null;
             for (int i = 0; i < inList.Count; ++i)

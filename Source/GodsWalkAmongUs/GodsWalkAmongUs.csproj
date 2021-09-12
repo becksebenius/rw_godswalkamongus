@@ -67,13 +67,17 @@
         <Compile Include="Core\DeityDomainDef.cs" />
         <Compile Include="Core\DeityInfo.cs" />
         <Compile Include="Core\DeityInfoGeneration.cs" />
+        <Compile Include="Core\DeityListDrawer.cs" />
         <Compile Include="Core\DeityTracker.cs" />
         <Compile Include="Incidents\GodArrival.cs" />
+        <Compile Include="Patches\PatchUtility.cs" />
         <Compile Include="Patches\Patch_Dialog_EditDeity.cs" />
         <Compile Include="Patches\HarmonyInit.cs" />
+        <Compile Include="Patches\Patch_IdeoFoundation_Deity.cs" />
         <Compile Include="Patches\Patch_IdeoManager.cs" />
         <Compile Include="Utility\RebootHelper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Utility\RectExtensions.cs" />
         <Compile Include="Utility\Utils.cs" />
     </ItemGroup>
     <ItemGroup>

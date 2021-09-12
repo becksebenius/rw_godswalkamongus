@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace GodsWalkAmongUs
@@ -14,7 +15,7 @@ namespace GodsWalkAmongUs
         public Faction Faction;
         public Pawn Pawn;
 
-        public DeityDomainDef Domain;
+        public List<DeityDomainDef> Domains = new List<DeityDomainDef>();
         
         // Serialization constructor
         public DeityInfo() {}
@@ -30,7 +31,7 @@ namespace GodsWalkAmongUs
             Scribe_Values.Look(ref DeityId, nameof(DeityId));
             Scribe_References.Look(ref Faction, nameof(Faction));
             Scribe_References.Look(ref Pawn, nameof(Pawn));
-            Scribe_Defs.Look(ref Domain, nameof(Domain));
+            Scribe_Collections.Look(ref Domains, nameof(Domains));
         }
     }
 }

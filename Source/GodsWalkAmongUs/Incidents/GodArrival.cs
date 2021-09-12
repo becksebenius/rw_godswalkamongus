@@ -44,7 +44,7 @@ namespace GodsWalkAmongUs
                 var deityInfo = DeityTracker.Instance.GetOrCreateDeityInfo(selectedIdeo, selectedDeity);
                 Find.LetterStack.ReceiveLetter(
                     new TaggedString(selectedDeity.name + " Arrives!"),
-                    new TaggedString("A god appears. " + deityInfo.Domain.label),
+                    new TaggedString("A god appears."),
                     LetterDefOf.PositiveEvent);
                 return true;
             }

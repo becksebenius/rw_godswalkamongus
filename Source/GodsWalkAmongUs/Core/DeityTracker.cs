@@ -54,13 +54,29 @@ namespace GodsWalkAmongUs
             => GetOrCreateDeityInfo(ideo, GetDeityId(ideo, deity));
         public DeityInfo GetOrCreateDeityInfo(Ideo ideo, int deityId)
         {
-            var deityInfo = deities.FirstOrDefault(info => info.Ideo == ideo && info.DeityId == deityId);
+            var deityInfo = GetDeityInfo(ideo, deityId);
             if (deityInfo != null) return deityInfo;
             
             deityInfo = new DeityInfo(ideo, deityId);
-            DeityInfoGeneration.Generate(deityInfo);
             deities.Add(deityInfo);
+            
+            DeityInfoGeneration.Generate(deityInfo);
+            
             return deityInfo;
+        }
+
+        public DeityInfo GetDeityInfo(Ideo ideo, IdeoFoundation_Deity.Deity deity)
+            => GetDeityInfo(ideo, GetDeityId(ideo, deity));
+        public DeityInfo GetDeityInfo(Ideo ideo, int deityId)
+        {
+            var deityInfo = deities.FirstOrDefault(info => info.Ideo == ideo && info.DeityId == deityId);
+            if (deityInfo != null) return deityInfo;
+            return null;
+        }
+
+        public void RemoveDeitiesWithIdeo(Ideo ideo)
+        {
+            deities.RemoveAll(d => d.Ideo == ideo);
         }
         
         void CreatePawn(DeityInfo deityInfo)

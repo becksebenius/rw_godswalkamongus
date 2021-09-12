@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -29,67 +30,86 @@ namespace GodsWalkAmongUs.HarmonyPatches
         }
     }
 
-    [HarmonyPatch(typeof(Dialog_EditDeity), nameof(Dialog_EditDeity.DoWindowContents))]
+    [HarmonyPatch(typeof(Dialog_EditDeity), nameof(RimWorld.Dialog_EditDeity.DoWindowContents))]
     public class Dialog_EditDeity_DoWindowContents
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var inList = instructions.ToList();
-            int? injectionIndex = null;
-            for (int i = 0; i < inList.Count; ++i)
-            {
-                var instr = inList[i];
-                if (!(instr.opcode == OpCodes.Ldstr
-                      && instr.operand is string stringValue
-                      && stringValue == "Back"))
-                {
-                    continue;
-                }
 
-                // Found the "Back" button
-                // Now look for the previous expression
-                for (int j = i; 0 <= j; --j)
-                {
-                    instr = inList[j];
-                    if (instr.opcode == OpCodes.Stloc_2)
-                    {
-                        injectionIndex = j;
-                        break;
-                    }
-                }
+            InjectDeityDialogExtensionDraw(inList);
+            RemoveTypeEditControl(inList);
+            
+            return inList;
+        }
 
-                break;
-            }
-
-            if (!injectionIndex.HasValue)
+        static void RemoveTypeEditControl(List<CodeInstruction> instructions)
+        {
+            var index = instructions.FindIndex(
+                instr =>
+                    instr.opcode == OpCodes.Ldstr
+                    && instr.operand is string stringOperand
+                    && stringOperand == "DeityTitle");
+            if (index == -1)
             {
                 Log.Error("Failed to find injection point for EditDeity dialog");
-                return inList;
+                return;
             }
 
-            var index = injectionIndex.Value;
+            int startIndex = index;
+            PatchUtility.TrackBack(instructions, ref startIndex, instr => instr.opcode == OpCodes.Stloc_2);
+            ++startIndex;
 
-            var newInstructions = new List<CodeInstruction>();
-            newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_1));
-            newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
-            newInstructions.Add(new CodeInstruction(OpCodes.Ldfld,
-                typeof(Dialog_EditDeity).GetField("ideo", BindingFlags.Instance | BindingFlags.NonPublic)));
-            newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
-            newInstructions.Add(new CodeInstruction(OpCodes.Ldfld,
-                typeof(Dialog_EditDeity).GetField("deity", BindingFlags.Instance | BindingFlags.NonPublic)));
-            newInstructions.Add(new CodeInstruction(OpCodes.Call,
-                typeof(DeityDialogExtension)
-                    .GetMethod(
-                        nameof(DeityDialogExtension.Draw),
-                        BindingFlags.Static | BindingFlags.Public)));
-            newInstructions.Add(new CodeInstruction(OpCodes.Nop));
+            int endIndex = index;
+            PatchUtility.TrackForward(instructions, ref endIndex, instr => 
+                instr.opcode == OpCodes.Stfld
+                && instr.OperandIs(typeof(Dialog_EditDeity).GetField("newDeityTitle", BindingFlags.Instance | BindingFlags.NonPublic)));
+            
+            Log.Message("Removing " + (endIndex - startIndex) + " instructions");
+
+            int totalToRemove = endIndex - startIndex + 1;
+            for (int i = 0; i < totalToRemove; ++i)
+            {
+                instructions.RemoveAt(startIndex);
+            }
+        }
+
+        static void InjectDeityDialogExtensionDraw(List<CodeInstruction> instructions)
+        {
+            int index = instructions.FindIndex(
+                instr =>
+                    instr.opcode == OpCodes.Ldstr
+                    && instr.operand is string stringValue
+                    && stringValue == "Back");
+            if (index == -1)
+            {
+                Log.Error("Failed to find injection point for EditDeity dialog");
+                return;
+            }
+            
+            PatchUtility.TrackBack(instructions, ref index, instr => instr.opcode == OpCodes.Stloc_2);
+
+            var newInstructions = new List<CodeInstruction>
+            {
+                new CodeInstruction(OpCodes.Ldarg_1),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldfld,
+                    typeof(Dialog_EditDeity).GetField("ideo", BindingFlags.Instance | BindingFlags.NonPublic)),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Ldfld,
+                    typeof(Dialog_EditDeity).GetField("deity", BindingFlags.Instance | BindingFlags.NonPublic)),
+                new CodeInstruction(OpCodes.Call,
+                    typeof(DeityDialogExtension)
+                        .GetMethod(
+                            nameof(DeityDialogExtension.Draw),
+                            BindingFlags.Static | BindingFlags.Public)),
+                new CodeInstruction(OpCodes.Nop)
+            };
             newInstructions.Reverse();
             foreach (var instr in newInstructions)
             {
-                inList.Insert(index, instr);
+                instructions.Insert(index, instr);
             }
-
-            return inList;
         }
     }
 }

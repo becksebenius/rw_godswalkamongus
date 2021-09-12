@@ -15,7 +15,7 @@ namespace GodsWalkAmongUs
             public Ideo ideo;
             public IdeoFoundation_Deity.Deity deity;
 
-            public DeityDomainDef domain;
+            public List<DeityDomainDef> domains = new List<DeityDomainDef>();
         }
 
         private static DeityDialogExtensionState currentState; 
@@ -34,15 +34,38 @@ namespace GodsWalkAmongUs
                 InitCurrentState();
             }
             
-            float builtinHeight = EditFieldHeight * 4 + 35f;
-            var rect = new Rect(windowRect.x, windowRect.y + builtinHeight, windowRect.width, 0f);
+            float headerHeight = 35f;
+            var rect = new Rect(windowRect.x, windowRect.y + headerHeight, windowRect.width, 0f);
             Rect left, right;
             
-            Row(ref rect, out left, out right);
+            // Exiting row - name
+            rect.NextRow(EditFieldHeight, EditFieldRatio); 
+            
+            // Overwriting existing row - Type
+            rect.NextRow(EditFieldHeight, EditFieldRatio, out left, out right);
             {
                 Widgets.Label(left, "DeityDomain".Translate());
                 Text.Anchor = TextAnchor.MiddleLeft;
-                Widgets.Label(right, currentState.domain.label);
+
+                string label;
+                if (currentState.domains.Count == 0)
+                {
+                    label = "None";
+                }
+                else
+                {
+                    label = "";
+                    for (int i = 0; i < currentState.domains.Count; ++i)
+                    {
+                        var domain = currentState.domains[i];
+                        label += domain.label;
+                        if (i != currentState.domains.Count - 1)
+                        {
+                            label += ", ";
+                        }
+                    }
+                }
+                Widgets.Label(right, label);
                 Text.Anchor = TextAnchor.UpperLeft;
                 Widgets.DrawHighlightIfMouseover(right);
                 if (Widgets.ButtonInvisible(right))
@@ -51,43 +74,49 @@ namespace GodsWalkAmongUs
                     foreach (var domainDef in DefDatabase<DeityDomainDef>.AllDefs)
                     {
                         var domainDefCopy = domainDef;
-                        options.Add(new FloatMenuOption(domainDef.label, () => currentState.domain = domainDefCopy));
+                        var domainDefLabel = domainDef.label;
+
+                        bool isIncluded = currentState.domains.Contains(domainDef);
+                        if (isIncluded)
+                        {
+                            domainDefLabel = "* " + domainDefLabel;
+                        }
+                        options.Add(new FloatMenuOption(domainDefLabel, () =>
+                        {
+                            if (isIncluded)
+                            {
+                                currentState.domains.Remove(domainDefCopy);
+                            }
+                            else
+                            {
+                                currentState.domains.Add(domainDefCopy);
+                            }
+                        }));
                     }
                     Find.WindowStack.Add((Window) new FloatMenu(options));
                 }
             }
+            
+            // Exiting row - gender
+            rect.NextRow(EditFieldHeight, EditFieldRatio);
         }
 
         static void InitCurrentState()
         {
             var deityInfo = DeityTracker.Instance.GetOrCreateDeityInfo(currentState.ideo, currentState.deity);
-            currentState.domain = deityInfo.Domain;
+            currentState.domains.Clear();
+            currentState.domains.AddRange(deityInfo.Domains);
         }
         
         public static void ApplyChanges()
         {
             var deityInfo = DeityTracker.Instance.GetOrCreateDeityInfo(currentState.ideo, currentState.deity);
-            deityInfo.Domain = currentState.domain;
+            deityInfo.Domains.Clear();
+            deityInfo.Domains.AddRange(currentState.domains);
+
+            deityInfo.Deity.type = DeityInfoGeneration.GenerateTypeString(deityInfo);
             
             currentState = null;
-        }
-
-        static void Row(ref Rect rect, out Rect left, out Rect right)
-        {
-            NextRow(ref rect, EditFieldHeight);
-            Split(rect, EditFieldRatio, out left, out right);
-        }
-        
-        static void Split(Rect rect, float ratio, out Rect left, out Rect right)
-        {
-            left = new Rect(rect.x, rect.y, rect.width * ratio, rect.height);
-            right = new Rect(left.x + left.width, rect.y, rect.width - left.width, rect.height);
-        }
-        
-        static void NextRow(ref Rect rect, float rowHeight)
-        {
-            rect.y += rect.height + 10;
-            rect.height = rowHeight;
         }
     }
 }
